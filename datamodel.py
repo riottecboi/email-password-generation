@@ -26,7 +26,7 @@ class User(Base):
     email = Column(String(128), unique=True)
 
 class Functions:
-    logger = None
+    logger = ''
     send_email_user = ''
     send_email_pass = ''
     receive_email_user = ''
@@ -54,6 +54,7 @@ class Functions:
             self.argon2_hash_len = kwargs['argon2_hash_len']
         if "argon2_salt_len" in kwargs:
             self.argon2_salt_len = kwargs['argon2_salt_len']
+        self.logger = logger
 
     hasher = argon2.PasswordHasher(
         time_cost=argon2_time_cost,  # number of iterations
@@ -105,6 +106,7 @@ class Functions:
                return check
         except Exception as e:
             self.logger.info(f"Exception occurred: {str(e)}")
+            return False
 
     ################################################################
 
