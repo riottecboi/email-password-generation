@@ -1,8 +1,21 @@
 import argon2
 import base64
 import bcrypt
+import random
+import secrets
+import uuid
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
+
+combined_characters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+                      'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q',
+                      'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                      'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                      'I', 'J', 'K', 'M', 'N', 'O', 'P', 'Q',
+                      'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                      '@', '#', '$', '%', '=', ':', '?', '.', '/', '|', '~', '>', '*', '(', ')', '<'
+                      ]
 
 Base = declarative_base()
 class User(Base):
@@ -13,6 +26,7 @@ class User(Base):
     email = Column(String(128), unique=True)
 
 class Functions:
+    logger = None
     send_email_user = ''
     send_email_pass = ''
     receive_email_user = ''
@@ -23,7 +37,7 @@ class Functions:
     argon2_salt_len = 16
 
 
-    def __init__(self, **kwargs):
+    def __init__(self, logger=logger, **kwargs):
         if "send_email_user" in kwargs:
             self.send_email_user = kwargs['send_email_user']
         if "send_email_pass" in kwargs:
@@ -90,6 +104,25 @@ class Functions:
                check = self.hasher.verify(encrypedPasswordstring, checkPasswordstring)
                return check
         except Exception as e:
-            print(f"Exception occurred: {str(e)}")
+            self.logger.info(f"Exception occurred: {str(e)}")
+
+    ################################################################
+
+    ######### POPULATE RANDOM PASSWORD #########
+
+    def generate_alphanumeric_random_password(self, length=12):
+        passwordCharacters = random.choices(combined_characters, k=length)
+        random.shuffle(passwordCharacters)
+        passwordString = "".join(passwordCharacters)
+        return passwordString
+
+    def generate_hexasecret_random_password(self):
+        passwordString = secrets.token_hex()
+        return passwordString
+
+    def generate_uuid_random_passwords(self):
+        uid = uuid.uuid4()
+        passwordString = str(uid).replace('-', '')
+        return passwordString
 
     ################################################################
