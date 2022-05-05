@@ -33,8 +33,8 @@ class Functions:
     argon2_time_cost = 3
     argon2_memory_cost = 64*1024
     argon2_parallelism = 1
-    argon2_hash_len = 32
-    argon2_salt_len = 16
+    argon2_hash_len = 12
+    argon2_salt_len = 10
 
 
     def __init__(self, logger=logger, **kwargs):
