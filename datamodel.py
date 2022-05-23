@@ -30,11 +30,11 @@ class Functions:
     send_email_user = ''
     send_email_pass = ''
     receive_email_user = ''
-    argon2_time_cost = 3
+    argon2_time_cost = 4
     argon2_memory_cost = 64*1024
-    argon2_parallelism = 1
+    argon2_parallelism = 3
     argon2_hash_len = 12
-    argon2_salt_len = 10
+    argon2_salt_len = 12
 
 
     def __init__(self, logger=logger, **kwargs):
